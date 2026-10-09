@@ -1,0 +1,65 @@
+{
+  "name": "claude-on-discord",
+  "version": "0.1.4",
+  "description": "Run Claude Code from Discord channels and threads.",
+  "module": "src/index.ts",
+  "type": "module",
+  "bin": {
+    "claude-on-discord": "bin/claude-on-discord.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "scripts/install.sh",
+    ".env.example",
+    "README.md",
+    "docs/SETUP.md",
+    "docs/TROUBLESHOOTING.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gorkamolero/claude-on-discord-clean.git"
+  },
+  "homepage": "https://github.com/gorkamolero/claude-on-discord-clean#readme",
+  "bugs": {
+    "url": "https://github.com/gorkamolero/claude-on-discord-clean/issues"
+  },
+  "keywords": [
+    "claude",
+    "discord",
+    "agent",
+    "cli",
+    "automation"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "init": "bun src/init.ts",
+    "setup": "bun src/init.ts",
+    "dev": "bun --watch src/index.ts",
+    "start": "bun src/guardian.ts",
+    "worker": "bun src/index.ts",
+    "guardian": "bun src/guardian.ts",
+    "deploy:site:check": "bash ./scripts/deploy-site-prod.sh --check",
+    "deploy:site": "bash ./scripts/deploy-site-prod.sh",
+    "test": "bun test",
+    "typecheck": "bunx tsc --noEmit",
+    "lint": "bunx biome check .",
+    "format": "bunx biome check --write .",
+    "dist:check": "bash ./scripts/release/check-package.sh",
+    "dist:brew:formula": "bash ./scripts/release/generate-homebrew-formula.sh"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.2",
+    "@types/bun": "latest"
+  },
+  "dependencies": {
+    "@anthropic-ai/claude-agent-sdk": "0.2.49",
+    "discord.js": "^14.25.1",
+    "zod": "^4.3.6"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}

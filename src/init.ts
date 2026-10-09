@@ -1,0 +1,222 @@
+import { existsSync } from "node:fs";
+import { readFile, writeFile } from "node:fs/promises";
+import path from "node:path";
+import { stdin, stdout } from "node:process";
+import { createInterface } from "node:readline/promises";
+import { buildInviteUrl, parseEnvFile, renderEnvFile, type SetupValues } from "./bootstrap/setup";
+import { askSecret, SetupPromptOutput } from "./bootstrap/setup-prompt";
+
+function valueOrDefault(value: string, fallback: string): string {
+  return value.trim() ? value.trim() : fallback;
+}
+
+async function ask(
+  rl: ReturnType<typeof createInterface>,
+  prompt: string,
+  fallback = "",
+): Promise<string> {
+  const suffix = fallback ? ` [${fallback}]` : "";
+  const answer = await rl.question(`${prompt}${suffix}: `);
+  return valueOrDefault(answer, fallback);
+}
+
+function parseYesNo(input: string, fallback: boolean): boolean {
+  const normalized = input.trim().toLowerCase();
+  if (!normalized) {
+    return fallback;
+  }
+  if (["y", "yes", "true", "1"].includes(normalized)) {
+    return true;
+  }
+  if (["n", "no", "false", "0"].includes(normalized)) {
+    return false;
+  }
+  return fallback;
+}
+
+function parseGuildIdList(input: string): string[] {
+  return Array.from(
+    new Set(
+      input
+        .split(",")
+        .map((value) => value.trim())
+        .filter(Boolean),
+    ),
+  );
+}
+
+async function askYesNo(
+  rl: ReturnType<typeof createInterface>,
+  prompt: string,
+  fallback: boolean,
+): Promise<boolean> {
+  const suffix = fallback ? " [Y/n]" : " [y/N]";
+  const answer = await rl.question(`${prompt}${suffix}: `);
+  return parseYesNo(answer, fallback);
+}
+
+async function openInviteInBrowser(url: string): Promise<boolean> {
+  const cmd =
+    process.platform === "darwin"
+      ? ["open", url]
+      : process.platform === "win32"
+        ? ["cmd", "/c", "start", "", url]
+        : ["xdg-open", url];
+
+  try {
+    const child = Bun.spawn({
+      cmd,
+      stdout: "ignore",
+      stderr: "ignore",
+    });
+    const exitCode = await child.exited;
+    return exitCode === 0;
+  } catch {
+    return false;
+  }
+}
+
+async function main(): Promise<void> {
+  const envPath = path.resolve(".env");
+  const current = existsSync(envPath) ? parseEnvFile(await readFile(envPath, "utf8")) : {};
+
+  const promptOutput = new SetupPromptOutput(stdout);
+  const rl = createInterface({ input: stdin, output: promptOutput });
+  try {
+    console.log("claude-on-discord setup\n");
+    const useClaudeLoginInsteadOfApiKey = await askYesNo(
+      rl,
+      "Use Claude login flow (bypass Anthropic API key prompt)",
+      true,
+    );
+    let anthropicApiKeyForEnv = "";
+    if (!useClaudeLoginInsteadOfApiKey) {
+      anthropicApiKeyForEnv = await askSecret(
+        rl,
+        promptOutput,
+        "Anthropic API key (optional, persisted to .env when provided)",
+        current.ANTHROPIC_API_KEY ?? "",
+      );
+    }
+
+    const values: SetupValues = {
+      discordToken: await askSecret(
+        rl,
+        promptOutput,
+        "Discord bot token",
+        current.DISCORD_TOKEN ?? "",
+      ),
+      applicationId: await ask(
+        rl,
+        "Application ID (same as client id)",
+        current.APPLICATION_ID ?? current.DISCORD_CLIENT_ID ?? "",
+      ),
+      discordClientId: "",
+      discordPublicKey: await ask(
+        rl,
+        "Discord public key (optional)",
+        current.DISCORD_PUBLIC_KEY ?? "",
+      ),
+      discordGuildIds: await ask(
+        rl,
+        "Discord guild/server ID(s), comma-separated",
+        current.DISCORD_GUILD_IDS ?? current.DISCORD_GUILD_ID ?? "",
+      ),
+      discordGuildId: "",
+      defaultWorkingDir: await ask(
+        rl,
+        "Default working directory",
+        current.DEFAULT_WORKING_DIR ?? "~/www",
+      ),
+      databasePath: await ask(
+        rl,
+        "Database path",
+        current.DATABASE_PATH ?? "./data/claude-on-discord.sqlite",
+      ),
+      defaultModel: await ask(rl, "Default model", current.DEFAULT_MODEL ?? "sonnet"),
+      autoThreadWorktree: await ask(
+        rl,
+        "Auto thread worktree (true/false)",
+        current.AUTO_THREAD_WORKTREE ?? "false",
+      ),
+      requireMentionInMultiUserChannels: await ask(
+        rl,
+        "Require @mention in multi-user channels (true/false)",
+        current.REQUIRE_MENTION_IN_MULTI_USER_CHANNELS ?? "true",
+      ),
+      // Keep bootstrap defaults stable without adding extra setup prompts.
+      worktreeBootstrap: current.WORKTREE_BOOTSTRAP ?? "true",
+      worktreeBootstrapCommand: current.WORKTREE_BOOTSTRAP_COMMAND ?? "",
+      claudePermissionMode: await ask(
+        rl,
+        "Claude permission mode",
+        current.CLAUDE_PERMISSION_MODE ?? "bypassPermissions",
+      ),
+      anthropicApiKey: anthropicApiKeyForEnv.trim() || undefined,
+      useAnthropicApiKey: useClaudeLoginInsteadOfApiKey ? "false" : "true",
+    };
+
+    values.discordClientId = values.applicationId;
+    const parsedGuildIds = parseGuildIdList(values.discordGuildIds ?? "");
+    values.discordGuildId = parsedGuildIds[0] ?? "";
+    values.discordGuildIds = parsedGuildIds.join(",");
+
+    if (!values.discordToken || !values.applicationId || parsedGuildIds.length === 0) {
+      throw new Error(
+        "DISCORD_TOKEN, APPLICATION_ID, and at least one Discord guild ID are required.",
+      );
+    }
+
+    await writeFile(envPath, renderEnvFile(values), "utf8");
+
+    const inviteUrl = buildInviteUrl({
+      applicationId: values.applicationId,
+      guildId: values.discordGuildId,
+    });
+
+    console.log(`\nWrote ${envPath}`);
+    console.log(`Invite URL:\n${inviteUrl}`);
+
+    const shouldOpenInvite = await askYesNo(rl, "Open invite URL in browser now", true);
+    if (shouldOpenInvite) {
+      const opened = await openInviteInBrowser(inviteUrl);
+      if (!opened) {
+        console.log("Could not open browser automatically. Open the invite URL manually.");
+      }
+    }
+
+    console.log("\nNext:");
+    console.log("1) Open invite URL and authorize bot for your server(s)");
+    console.log("2) Start the bot:");
+    console.log("   npx claude-on-discord@latest start");
+    console.log("   (from a git checkout, you can also use: bun start)");
+    if (useClaudeLoginInsteadOfApiKey) {
+      if ((current.ANTHROPIC_API_KEY ?? "").trim().length > 0) {
+        console.log("3) Removed ANTHROPIC_API_KEY from .env (using Claude login mode by default).");
+      }
+      if ((current.USE_ANTHROPIC_API_KEY ?? "").trim().length > 0) {
+        console.log("4) Removed USE_ANTHROPIC_API_KEY override from .env.");
+      }
+      console.log(
+        "5) If prompted for Anthropic API key, run `claude` once and choose account login.",
+      );
+    } else {
+      if (values.anthropicApiKey) {
+        console.log(
+          "3) Saved USE_ANTHROPIC_API_KEY=true and ANTHROPIC_API_KEY to .env (explicit API-key mode).",
+        );
+      } else {
+        console.log(
+          "3) Saved USE_ANTHROPIC_API_KEY=true to .env. Export ANTHROPIC_API_KEY in your shell before starting.",
+        );
+      }
+    }
+  } finally {
+    rl.close();
+  }
+}
+
+main().catch((error) => {
+  console.error("setup failed:", error instanceof Error ? error.message : String(error));
+  process.exit(1);
+});
