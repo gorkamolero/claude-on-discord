@@ -78,7 +78,7 @@ mkdir -p "$(dirname "$OUTPUT")"
 cat > "$OUTPUT" <<FORMULA
 class ${CLASS_NAME} < Formula
   desc "Claude Code in Discord channels and threads"
-  homepage "https://github.com/gorkamolero/claude-on-discord-clean"
+  homepage "https://github.com/gorkamolero/claude-on-discord"
   url "${TARBALL_URL}"
   sha256 "${SHA256}"
 

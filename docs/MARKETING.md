@@ -243,7 +243,7 @@ Keep it in trusted servers. Trust it like a dev tool, not a public service.
 
 ```bash
 # 1. Clone and install
-git clone https://github.com/gorkamolero/claude-on-discord-clean
+git clone https://github.com/gorkamolero/claude-on-discord
 cd claude-on-discord && bun install
 
 # 2. Configure
@@ -596,7 +596,7 @@ What you need before starting:
 2/
 Step 1: Get the code
 
-git clone https://github.com/gorkamolero/claude-on-discord-clean
+git clone https://github.com/gorkamolero/claude-on-discord
 cd claude-on-discord
 bun install
 

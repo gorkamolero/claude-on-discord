@@ -52,7 +52,7 @@ npx claude-on-discord start
 Git clone:
 
 ```bash
-git clone https://github.com/gorkamolero/claude-on-discord-clean claude-on-discord
+git clone https://github.com/gorkamolero/claude-on-discord claude-on-discord
 cd claude-on-discord
 bun install
 bun run setup

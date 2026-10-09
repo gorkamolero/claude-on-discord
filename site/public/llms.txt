@@ -18,7 +18,7 @@ Claude Code running in Discord. Send messages in a channel, Claude executes on y
 ## Install
 
 ```bash
-git clone https://github.com/gorkamolero/claude-on-discord-clean claude-on-discord
+git clone https://github.com/gorkamolero/claude-on-discord claude-on-discord
 cd claude-on-discord && bun install
 bun run setup   # interactive wizard: writes .env, prints bot invite URL
 bun start
@@ -60,6 +60,6 @@ AUTO_THREAD_WORKTREE=     # true to auto-create git worktrees for thread forks
 
 ## Docs
 
-- [Setup guide](https://github.com/gorkamolero/claude-on-discord-clean/blob/main/docs/SETUP.md)
-- [Architecture](https://github.com/gorkamolero/claude-on-discord-clean/blob/main/docs/ARCHITECTURE.md)
-- [GitHub](https://github.com/gorkamolero/claude-on-discord-clean)
+- [Setup guide](https://github.com/gorkamolero/claude-on-discord/blob/main/docs/SETUP.md)
+- [Architecture](https://github.com/gorkamolero/claude-on-discord/blob/main/docs/ARCHITECTURE.md)
+- [GitHub](https://github.com/gorkamolero/claude-on-discord)

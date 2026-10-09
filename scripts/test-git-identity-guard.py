@@ -33,7 +33,7 @@ with tempfile.TemporaryDirectory(prefix="discord-identity-check-") as tmp:
                        ("user.email", "1006865+gorkamolero@users.noreply.github.com"),
                        ("core.hooksPath", "scripts/githooks")]:
         assert run(repo, "git", "config", key, value, env=env).returncode == 0
-    url = "https://github.com/gorkamolero/claude-on-discord-clean.git"
+    url = "https://github.com/gorkamolero/claude-on-discord.git"
     assert run(repo, "git", "remote", "add", "origin", url, env=env).returncode == 0
     (repo / "example.txt").write_text("safe example\n")
     assert run(repo, "git", "add", "example.txt", env=env).returncode == 0

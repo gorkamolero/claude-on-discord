@@ -8,7 +8,7 @@ import sys
 LOGIN = "gorkamolero"
 NAME = "Gorka Molero"
 EMAIL = "1006865+gorkamolero@users.noreply.github.com"
-REPO = "gorkamolero/claude-on-discord-clean"
+REPO = "gorkamolero/claude-on-discord"
 URLS = {f"https://github.com/{REPO}.git", f"git@github.com:{REPO}.git"}
 
 

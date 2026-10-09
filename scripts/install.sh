@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-REPO_URL="${CLAUDE_ON_DISCORD_REPO_URL:-https://github.com/gorkamolero/claude-on-discord-clean.git}"
+REPO_URL="${CLAUDE_ON_DISCORD_REPO_URL:-https://github.com/gorkamolero/claude-on-discord.git}"
 TARGET_DIR="${1:-$HOME/claude-on-discord}"
 
 echo "==> claude-on-discord installer"

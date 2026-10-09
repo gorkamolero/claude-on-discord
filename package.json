@@ -18,11 +18,11 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gorkamolero/claude-on-discord-clean.git"
+    "url": "git+https://github.com/gorkamolero/claude-on-discord.git"
   },
-  "homepage": "https://github.com/gorkamolero/claude-on-discord-clean#readme",
+  "homepage": "https://github.com/gorkamolero/claude-on-discord#readme",
   "bugs": {
-    "url": "https://github.com/gorkamolero/claude-on-discord-clean/issues"
+    "url": "https://github.com/gorkamolero/claude-on-discord/issues"
   },
   "keywords": [
     "claude",
