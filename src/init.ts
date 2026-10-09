@@ -195,8 +195,7 @@ async function main(): Promise<void> {
     console.log("\nNext:");
     console.log("1) Open invite URL and authorize bot for your server(s)");
     console.log("2) Start the bot:");
-    console.log("   npx claude-on-discord@latest start");
-    console.log("   (from a git checkout, you can also use: bun start)");
+    console.log("   bun start");
     if (useClaudeLoginInsteadOfApiKey) {
       if ((current.ANTHROPIC_API_KEY ?? "").trim().length > 0) {
         console.log("3) Removed ANTHROPIC_API_KEY from .env (using Claude login mode by default).");

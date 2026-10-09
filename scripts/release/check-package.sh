@@ -24,7 +24,7 @@ PKG_PRIVATE="$(node -p "String(Boolean(require('./package.json').private))")"
 
 [ -n "$PKG_NAME" ] || fail "package name is missing"
 [ -n "$PKG_VERSION" ] || fail "package version is missing"
-[ "$PKG_PRIVATE" = "false" ] || fail "package.json is still private=true"
+[ "$PKG_PRIVATE" = "true" ] || fail "npm publication must remain disabled (private=true)"
 [ -n "$PKG_BIN" ] || fail "package.json bin entry is missing"
 [ -f "$PKG_BIN" ] || fail "bin file not found: $PKG_BIN"
 [ -x "$PKG_BIN" ] || fail "bin file is not executable: $PKG_BIN"
@@ -36,4 +36,4 @@ npm pack --dry-run >/dev/null
 echo "[dist:check] cli help"
 node "$PKG_BIN" --help >/dev/null
 
-echo "[dist:check] OK - $PKG_NAME@$PKG_VERSION is publish-ready"
+echo "[dist:check] OK - $PKG_NAME@$PKG_VERSION local package validated; npm publication disabled"

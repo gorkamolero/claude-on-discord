@@ -1,14 +1,19 @@
 # Distribution
 
-## Targets
+Install from the Git repository:
 
-- `npx claude-on-discord ...` from npm (primary)
-- Homebrew tap formula generated from published npm tarball
+```bash
+git clone https://github.com/gorkamolero/claude-on-discord
+cd claude-on-discord
+bun install
+bun run setup
+bun start
+```
 
-## Maintainer Release Flow
+The repository is private; cloning requires GitHub access.
+The npm package with the same name is a separate historical distribution and is not the installation source for this checkout.
 
-1. Bump `version` in `package.json`.
-2. Run checks:
+## Local package validation
 
 ```bash
 bun run test
@@ -16,45 +21,6 @@ bun run typecheck
 bun run dist:check
 ```
 
-3. Publish npm package:
+`dist:check` validates a local package archive and CLI help. It requires `private: true` in `package.json`, which prevents accidental npm publication.
 
-```bash
-npm publish --access public
-```
-
-4. Verify npx:
-
-```bash
-npx claude-on-discord@latest --help
-```
-
-5. Generate Homebrew formula from the published tarball:
-
-```bash
-bun run dist:brew:formula -- --version <x.y.z>
-```
-
-Default output path:
-
-- `dist/homebrew/claude-on-discord.rb`
-
-Commit that formula into your tap repo (for example `homebrew-tap/Formula/claude-on-discord.rb`) and push.
-
-## User Install Paths
-
-`npx` (recommended):
-
-```bash
-npx claude-on-discord setup
-npx claude-on-discord start
-```
-
-Git clone:
-
-```bash
-git clone https://github.com/gorkamolero/claude-on-discord claude-on-discord
-cd claude-on-discord
-bun install
-bun run setup
-bun start
-```
+Publishing or transferring a package requires an explicit decision about its name and publisher identity. A new GitHub repository does not change historical npm records. No package should be published or linked to another account during this cleanup.

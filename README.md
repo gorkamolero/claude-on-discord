@@ -50,16 +50,7 @@ Requires:
 - [Claude Code](https://claude.ai/code), installed and authenticated
 - a Discord account and Discord application
 
-Option A, npx distribution:
-
-```bash
-npx claude-on-discord setup
-npx claude-on-discord start
-```
-
-`npx` installs the runtime into `~/.claude-on-discord` on first run. Override with `CLAUDE_ON_DISCORD_HOME`.
-
-Option B, git checkout:
+Install from this Git repository:
 
 ```bash
 git clone https://github.com/gorkamolero/claude-on-discord claude-on-discord

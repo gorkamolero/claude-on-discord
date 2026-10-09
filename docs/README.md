@@ -8,7 +8,7 @@ This directory holds project docs that are too detailed for the top-level `READM
 - `ARCHITECTURE.md`: system design, data model, and message flow
 - `TROUBLESHOOTING.md`: common failures, diagnosis steps, and fixes
 - `SECURITY.md`: security posture, token handling, and operational risks
-- `DISTRIBUTION.md`: npm/npx + Homebrew release workflow
+- `DISTRIBUTION.md`: Git installation and local package validation
 - `WEBSITE_BRIEF.md`: positioning and content brief for the future website
 - `MARKETING.md`: messaging strategy, website copy, Twitter thread drafts
 

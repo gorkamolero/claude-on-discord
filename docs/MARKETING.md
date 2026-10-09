@@ -274,7 +274,7 @@ then just talk to it like Claude Code.
 - `→` Plan mode with explicit approval before execution
 - `→` Branch diff summaries in Discord
 - `→` PR review buttons (conductor-style structured prompts)
-- `→` `npx` distribution (no clone needed)
+- `→` Installation improvements for the Git checkout
 - `→` Multi-guild support
 
 ---
@@ -741,13 +741,9 @@ Before any real launch:
 4. **Product Hunt** — after GitHub and some organic traction
 5. **Discord communities** — Anthropic dev Discord, indie hacker servers, AI builders
 
-### npx distribution (unlock more reach)
-Once the `bin/claude-on-discord.js` scaffold is complete:
-```bash
-npx claude-on-discord setup
-npx claude-on-discord start
-```
-This removes the clone-and-install friction and makes it a proper public tool.
+### Distribution status
+
+Install from the Git repository. Package publication is disabled until a package name and public publisher identity are explicitly approved.
 
 ---
 
