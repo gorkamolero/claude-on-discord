@@ -1,8 +1,9 @@
 {
   "lockfileVersion": 1,
+  "configVersion": 0,
   "workspaces": {
     "": {
-      "name": "claude-on-discord",
+      "name": "@gorkamolero/claude-on-discord",
       "dependencies": {
         "@anthropic-ai/claude-agent-sdk": "0.2.49",
         "discord.js": "^14.25.1",

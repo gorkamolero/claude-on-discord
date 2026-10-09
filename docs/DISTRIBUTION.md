@@ -1,26 +1,32 @@
 # Distribution
 
-Install from the Git repository:
+The new public npm package is `@gorkamolero/claude-on-discord`.
+The unscoped historical package is a separate distribution.
+
+## Install
 
 ```bash
-git clone https://github.com/gorkamolero/claude-on-discord
-cd claude-on-discord
-bun install
-bun run setup
-bun start
+npx @gorkamolero/claude-on-discord@latest setup
+npx @gorkamolero/claude-on-discord@latest start
 ```
 
-The repository is private; cloning requires GitHub access.
-The npm package with the same name is a separate historical distribution and is not the installation source for this checkout.
+The npm installer copies the bundled runtime into `~/.claude-on-discord` and installs its dependencies with Bun. It does not require access to the private GitHub repository. Runtime configuration and data remain in that directory.
 
-## Local package validation
+To update the runtime:
 
 ```bash
-bun run test
+npx @gorkamolero/claude-on-discord@latest install
+```
+
+Git checkout installation remains available to repository collaborators.
+
+## Release
+
+```bash
+bun test
 bun run typecheck
 bun run dist:check
+npm publish --access public
 ```
 
-`dist:check` validates a local package archive and CLI help. It requires `private: true` in `package.json`, which prevents accidental npm publication.
-
-Publishing or transferring a package requires an explicit decision about its name and publisher identity. A new GitHub repository does not change historical npm records. No package should be published or linked to another account during this cleanup.
+The publication hook requires the authenticated npm publisher to be `gorkamolero` and the scoped package name to match. It refuses other accounts.

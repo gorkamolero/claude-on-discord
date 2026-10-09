@@ -45,7 +45,13 @@ In your new application, go to the **Bot** tab on the left sidebar.
 
 ## 4. Install and Configure
 
-Install from the Git repository:
+Install the new npm package:
+
+```bash
+npx @gorkamolero/claude-on-discord@latest setup
+```
+
+Or install from the Git repository (requires repository access):
 
 ```bash
 git clone https://github.com/gorkamolero/claude-on-discord claude-on-discord

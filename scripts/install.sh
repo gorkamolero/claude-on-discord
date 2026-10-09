@@ -3,12 +3,13 @@ set -euo pipefail
 
 REPO_URL="${CLAUDE_ON_DISCORD_REPO_URL:-https://github.com/gorkamolero/claude-on-discord.git}"
 TARGET_DIR="${1:-$HOME/claude-on-discord}"
+PACKAGE_SOURCE="${2:-}"
 
 echo "==> claude-on-discord installer"
 echo "Repo:   $REPO_URL"
 echo "Target: $TARGET_DIR"
 
-if ! command -v git >/dev/null 2>&1; then
+if [ -z "$PACKAGE_SOURCE" ] && ! command -v git >/dev/null 2>&1; then
   echo "error: git is required but not installed." >&2
   exit 1
 fi
@@ -35,12 +36,23 @@ if ! command -v bun >/dev/null 2>&1; then
   fi
 fi
 
-if [ -d "$TARGET_DIR/.git" ]; then
-  echo "==> existing repo found; pulling latest..."
-  git -C "$TARGET_DIR" pull --ff-only
+if [ -n "$PACKAGE_SOURCE" ]; then
+  if [ -d "$TARGET_DIR/.git" ]; then
+    echo "error: refusing to overwrite a Git checkout with an npm release." >&2
+    exit 1
+  fi
+  echo "==> installing bundled npm runtime..."
+  mkdir -p "$TARGET_DIR"
+  cp -R "$PACKAGE_SOURCE/src" "$PACKAGE_SOURCE/bin" "$TARGET_DIR/"
+  cp "$PACKAGE_SOURCE/package.json" "$PACKAGE_SOURCE/.env.example" "$TARGET_DIR/"
 else
-  echo "==> cloning repo..."
-  git clone "$REPO_URL" "$TARGET_DIR"
+  if [ -d "$TARGET_DIR/.git" ]; then
+    echo "==> existing repo found; pulling latest..."
+    git -C "$TARGET_DIR" pull --ff-only
+  else
+    echo "==> cloning repo..."
+    git clone "$REPO_URL" "$TARGET_DIR"
+  fi
 fi
 
 cd "$TARGET_DIR"

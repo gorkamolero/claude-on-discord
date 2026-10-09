@@ -50,7 +50,13 @@ Requires:
 - [Claude Code](https://claude.ai/code), installed and authenticated
 - a Discord account and Discord application
 
-Install from this Git repository:
+Install the new npm package:
+
+```bash
+npx @gorkamolero/claude-on-discord@latest setup
+```
+
+Or install from this Git repository (requires repository access):
 
 ```bash
 git clone https://github.com/gorkamolero/claude-on-discord claude-on-discord
@@ -64,7 +70,7 @@ The setup wizard writes `.env` and prints a Discord invite URL.
 Start the recommended guardian runtime:
 
 ```bash
-bun start
+npx @gorkamolero/claude-on-discord@latest start
 ```
 
 Full setup guide: [`docs/SETUP.md`](docs/SETUP.md).

@@ -79,7 +79,7 @@ function isRuntimeRoot(dir) {
   if (!existsSync(packageJsonPath) || !existsSync(entryPath)) {
     return false;
   }
-  return readPackageName(packageJsonPath) === "claude-on-discord";
+  return ["claude-on-discord", "@gorkamolero/claude-on-discord"].includes(readPackageName(packageJsonPath));
 }
 
 const scriptPath = fileURLToPath(import.meta.url);
@@ -108,7 +108,7 @@ async function ensureRuntimeInstalled() {
   }
 
   console.log(`No runtime found. Installing to ${runtimeHome} ...`);
-  const exitCode = await runCommand("bash", [installerScriptPath, runtimeHome], {
+  const exitCode = await runCommand("bash", [installerScriptPath, runtimeHome, packageRoot], {
     cwd: process.cwd(),
   });
   if (exitCode !== 0) {
@@ -130,7 +130,7 @@ if (command === "install") {
     process.exit(1);
   }
 
-  runCommand("bash", [installerScriptPath, explicitTarget], { cwd: process.cwd() })
+  runCommand("bash", [installerScriptPath, explicitTarget, packageRoot], { cwd: process.cwd() })
     .then((exitCode) => process.exit(exitCode))
     .catch((error) => {
       const message = error instanceof Error ? error.message : String(error);

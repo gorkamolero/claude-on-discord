@@ -44,7 +44,7 @@ describe("cli bin", () => {
     expect(result.output).toContain("Unknown command: wat");
   });
 
-  test("runs bun from CLAUDE_ON_DISCORD_HOME when outside repo", async () => {
+  test("runs scoped runtime from CLAUDE_ON_DISCORD_HOME when outside repo", async () => {
     const tempRoot = await mkdtemp(path.join(os.tmpdir(), "claude-on-discord-cli-"));
     const runtimeRoot = path.join(tempRoot, "runtime");
     const fakeBinDir = path.join(tempRoot, "fake-bin");
@@ -56,7 +56,7 @@ describe("cli bin", () => {
 
     await writeFile(
       path.join(runtimeRoot, "package.json"),
-      JSON.stringify({ name: "claude-on-discord" }),
+      JSON.stringify({ name: "@gorkamolero/claude-on-discord" }),
       "utf8",
     );
     await writeFile(path.join(runtimeRoot, "src", "index.ts"), "console.log('worker')\n", "utf8");

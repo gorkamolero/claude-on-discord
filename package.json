@@ -1,7 +1,7 @@
 {
-  "name": "claude-on-discord",
-  "version": "0.1.4",
-  "private": true,
+  "name": "@gorkamolero/claude-on-discord",
+  "version": "0.1.5",
+  "private": false,
   "description": "Run Claude Code from Discord channels and threads.",
   "module": "src/index.ts",
   "type": "module",
@@ -49,7 +49,8 @@
     "lint": "bunx biome check .",
     "format": "bunx biome check --write .",
     "dist:check": "bash ./scripts/release/check-package.sh",
-    "dist:brew:formula": "bash ./scripts/release/generate-homebrew-formula.sh"
+    "dist:brew:formula": "bash ./scripts/release/generate-homebrew-formula.sh",
+    "prepublishOnly": "bash ./scripts/release/check-publisher.sh"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.2",
@@ -62,5 +63,9 @@
   },
   "peerDependencies": {
     "typescript": "^5"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }
