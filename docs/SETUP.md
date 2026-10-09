@@ -76,7 +76,7 @@ Credential input is hidden. On repeat setup, press Enter to keep a saved token o
 
 ## 5. Invite the Bot
 
-The setup wizard offers to open the invite URL automatically. If it doesn't open, copy it from the terminal output and open it in your browser.
+The setup wizard copies the invite URL to your clipboard and offers to open it in your browser. If clipboard access is unavailable, the URL stays visible in the terminal so you can copy it manually. Installation continues either way.
 
 Select your server → **Authorize**.
 

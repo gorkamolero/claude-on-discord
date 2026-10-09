@@ -4,6 +4,7 @@ import path from "node:path";
 import { stdin, stdout } from "node:process";
 import { createInterface } from "node:readline/promises";
 import { buildInviteUrl, parseEnvFile, renderEnvFile, type SetupValues } from "./bootstrap/setup";
+import { copyInviteUrlToClipboard } from "./bootstrap/setup-clipboard";
 import { askSecret, SetupPromptOutput } from "./bootstrap/setup-prompt";
 
 function valueOrDefault(value: string, fallback: string): string {
@@ -176,6 +177,12 @@ async function main(): Promise<void> {
 
     console.log(`\nWrote ${envPath}`);
     console.log(`Invite URL:\n${inviteUrl}`);
+    const copied = await copyInviteUrlToClipboard(inviteUrl);
+    console.log(
+      copied
+        ? "Invite URL copied to clipboard."
+        : "Clipboard unavailable. Copy the invite URL above to open it manually.",
+    );
 
     const shouldOpenInvite = await askYesNo(rl, "Open invite URL in browser now", true);
     if (shouldOpenInvite) {
