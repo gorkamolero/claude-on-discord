@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { mkdtemp, mkdir, realpath, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, realpath, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 
@@ -64,7 +64,7 @@ describe("cli bin", () => {
     const bunStubPath = path.join(fakeBinDir, "bun");
     await writeFile(
       bunStubPath,
-      "#!/usr/bin/env bash\necho \"FAKE_BUN_CWD=$PWD\"\necho \"FAKE_BUN_ARGS=$*\"\n",
+      '#!/usr/bin/env bash\necho "FAKE_BUN_CWD=$PWD"\necho "FAKE_BUN_ARGS=$*"\n',
       "utf8",
     );
     await Bun.$`chmod +x ${bunStubPath}`.quiet();
