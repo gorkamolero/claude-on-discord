@@ -43,3 +43,5 @@ gleaming-moseying-codd.md
 # Python tooling caches
 __pycache__/
 *.pyc
+.env*
+!.env.example
