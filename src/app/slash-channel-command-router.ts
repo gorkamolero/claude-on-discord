@@ -17,6 +17,7 @@ import { handleBranchesCommand } from "./slash-commands/branches-command";
 import { handleCompactCommand } from "./slash-commands/compact-command";
 import { handleDiffCommand } from "./slash-commands/diff-command";
 import { handleForkCommand } from "./slash-commands/fork-command";
+import { handleInstantCommand } from "./slash-commands/instant-command";
 import { handleKillCommand } from "./slash-commands/kill-command";
 import { handleMergeCommand } from "./slash-commands/merge-command";
 import { handleModelCommand } from "./slash-commands/model-command";
@@ -215,6 +216,13 @@ export async function handleChannelSlashCommandRoute(
         guildId: input.guildId,
         sessions: input.sessions,
         pendingProjectSwitches: input.pendingProjectSwitches,
+      });
+      break;
+    }
+    case "instant": {
+      await handleInstantCommand({
+        interaction: input.interaction,
+        repository: input.repository,
       });
       break;
     }

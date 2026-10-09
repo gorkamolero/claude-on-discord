@@ -45,6 +45,7 @@ import { createQueuedChannelDispatch } from "./queued-channel-dispatch";
 import { notifyRunFailure } from "./run-failure-notifier";
 import { createRunawayToolGuard } from "./runaway-tool-guard";
 import { logRunnerSkillDebug } from "./runner-skill-debug";
+import { isInstantModeOn } from "./slash-commands/instant-command";
 import { createStreamingStatusController } from "./streaming-status-controller";
 import type { ThreadDebugger } from "./thread-debugger";
 import {
@@ -530,9 +531,10 @@ export function createUserMessageHandler(input: {
         const prompt = withNoInteractiveToolDirective(basePrompt);
         const applyRunnerSafetyGuards = shouldApplyRunnerSafetyGuards(prompt);
         const guardedMaxTurns = applyRunnerSafetyGuards ? 8 : undefined;
-        const guardedThinking = applyRunnerSafetyGuards
-          ? ({ type: "disabled" } as const)
-          : undefined;
+        const guardedThinking =
+          applyRunnerSafetyGuards || isInstantModeOn(input.repository)
+            ? ({ type: "disabled" } as const)
+            : undefined;
         const guardedDisallowedTools = applyRunnerSafetyGuards
           ? [...SAFETY_DISALLOWED_TOOLS]
           : undefined;

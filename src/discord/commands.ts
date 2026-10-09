@@ -27,6 +27,20 @@ const slashCommands = [
     ),
   new SlashCommandBuilder().setName("new").setDescription("Reset Claude session for this channel"),
   new SlashCommandBuilder()
+    .setName("instant")
+    .setDescription("Instant mode for every channel and server: Claude answers without thinking")
+    .addStringOption((option) =>
+      option
+        .setName("mode")
+        .setDescription("Turn instant mode on or off, or show it")
+        .setRequired(true)
+        .addChoices(
+          { name: "on", value: "on" },
+          { name: "off", value: "off" },
+          { name: "show", value: "show" },
+        ),
+    ),
+  new SlashCommandBuilder()
     .setName("fork")
     .setDescription("Fork conversation into a new thread; from inside a thread, creates a sibling")
     .addStringOption((option) =>
